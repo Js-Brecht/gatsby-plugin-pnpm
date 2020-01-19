@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Easily add pnpm support to your Gatsby project",
   "main": "index.js",
+  "types": "./dist/gatsby-node.js",
   "repository": {
     "type": "git",
     "url": "https://Js-Brecht/gatsby-plugin-pnpm"
