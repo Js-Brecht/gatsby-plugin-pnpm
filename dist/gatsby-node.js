@@ -61,7 +61,7 @@ exports.onCreateWebpackConfig = function (_a, options) {
                 case 2:
                     gatsbyNodeModules = _g.sent();
                     if (!gatsbyNodeModules) {
-                        throw new Error("[gatsby-plugin-pnpm] Unable to resolve your Gatsby install's real path!!");
+                        return [2, reporter.panic("[gatsby-plugin-pnpm] Unable to resolve your Gatsby install's real path!!")];
                     }
                     modulePaths = [
                         'node_modules',
@@ -70,7 +70,7 @@ exports.onCreateWebpackConfig = function (_a, options) {
                         pnpmNodeModules,
                     ];
                     if (!options.resolutions) return [3, 11];
-                    _i = 0, _c = options.resolutions;
+                    _i = 0, _c = options.include;
                     _g.label = 3;
                 case 3:
                     if (!(_i < _c.length)) return [3, 11];
