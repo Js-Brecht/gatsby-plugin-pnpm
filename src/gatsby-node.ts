@@ -4,7 +4,7 @@ import { GatsbyNode, CreateWebpackConfigArgs, PluginOptions } from 'gatsby';
 import { realpath, isDir, fileExists, walkBack } from './utils';
 
 interface IPnpmOptions extends PluginOptions {
-    resolutions: string[];
+    include: string[];
 }
 
 /**
@@ -16,9 +16,9 @@ interface IPnpmOptions extends PluginOptions {
  *
  * Available options are:
  *
- * | Option    | Description |
- * |:----------|:------------|
- * | resolutions  |a list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.|
+ * | Option  | Description |
+ * |:--------|:------------|
+ * | include | a list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.|
  */
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async ({ actions, reporter }: CreateWebpackConfigArgs, options: IPnpmOptions): Promise<void> => {
     const { setWebpackConfig } = actions;
@@ -27,7 +27,7 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
     const gatsbyNodeModules = await walkBack(await realpath(path.join(nodeModules, 'gatsby')));
 
     if (!gatsbyNodeModules) {
-        throw new Error("[gatsby-plugin-pnpm] Unable to resolve your Gatsby install's real path!!");
+        return reporter.panic("[gatsby-plugin-pnpm] Unable to resolve your Gatsby install's real path!!");
     }
 
     const modulePaths: string[] = [
@@ -38,7 +38,7 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
     ];
 
     if (options.resolutions) {
-        for (const pkgName of options.resolutions) {
+        for (const pkgName of options.include) {
             // If the defined package name option is a directory, then resolve its realpath and
             // load it directly
             if (await isDir(pkgName)) {
