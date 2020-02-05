@@ -3,7 +3,7 @@ import { Configuration } from 'webpack';
 import { GatsbyNode, CreateWebpackConfigArgs, PluginOptions } from 'gatsby';
 import { realpath, isDir, fileExists, walkBack } from './utils';
 
-interface IPnpmOptions extends PluginOptions {
+interface IPluginOptions extends PluginOptions {
     include: string[];
 }
 
@@ -12,7 +12,7 @@ interface IPnpmOptions extends PluginOptions {
  * installed using `pnpm`
  * @param {CreateWebpackConfigArgs} config The configuration options that are passed in by
  * `gatsby`.
- * @param {IPnpmOptions} options The options provided by the user in `gatsby-config`.
+ * @param {IPluginOptions} options The options provided by the user in `gatsby-config`.
  *
  * Available options are:
  *
@@ -20,7 +20,7 @@ interface IPnpmOptions extends PluginOptions {
  * |:--------|:------------|
  * | include | a list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.|
  */
-export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async ({ actions, reporter }: CreateWebpackConfigArgs, options: IPnpmOptions): Promise<void> => {
+export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async ({ actions, reporter }: CreateWebpackConfigArgs, options: IPluginOptions): Promise<void> => {
     const { setWebpackConfig } = actions;
     const nodeModules = path.join(process.cwd(), 'node_modules');
     const pnpmNodeModules = path.join(nodeModules, '.pnpm', 'node_modules');
