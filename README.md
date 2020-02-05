@@ -67,6 +67,7 @@ module.exports = {
       options: {
         resolutions: [
           `my-awesome-package`,
+          `my/private/webpack/loaders`
         ]
       }
     }
