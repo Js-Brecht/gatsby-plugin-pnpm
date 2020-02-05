@@ -4,7 +4,7 @@ import { GatsbyNode, CreateWebpackConfigArgs, PluginOptions } from 'gatsby';
 import { realpath, isDir, fileExists } from './utils';
 
 interface IPnpmOptions extends PluginOptions {
-    packages: string[];
+    resolutions: string[];
 }
 
 /**
@@ -18,7 +18,7 @@ interface IPnpmOptions extends PluginOptions {
  *
  * | Option    | Description |
  * |:----------|:------------|
- * | packages  |a list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.|
+ * | resolutions  |a list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.|
  */
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async ({ actions }: CreateWebpackConfigArgs, options: IPnpmOptions): Promise<void> => {
     const { setWebpackConfig } = actions;
@@ -32,8 +32,8 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
         pnpmNodeModules,
     ];
 
-    if (options.packages) {
-        for (const pkgName of options.packages) {
+    if (options.resolutions) {
+        for (const pkgName of options.resolutions) {
             // If the defined package name option is a directory, then resolve its realpath and
             // load it directly
             if (await isDir(pkgName)) {

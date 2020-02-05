@@ -2,7 +2,7 @@
 
 ### Description
 
-This plugin will integrate module resolution for packages installed
+This plugin will integrate Webpack module resolution for packages installed
 using `pnpm`.
 
 When using `pnpm`, building a gatsby project will fail because `pnpm` uses a unique
@@ -36,14 +36,14 @@ That's it.  You should be able to build now.
 project's dependencies, and due to the way Webpack resolves modules (and sometimes because of
 the way those modules are written), it won't be able to.  If this is the case, we need to point
 Webpack the way to where those sub-dependencies are located.  To do that, please include your
-dependency in question in the `packages` plugin option described below.
+dependency in question in the `resolutions` plugin option described below.
 
   * Note: the package you define in this manner **MUST** be one of your project's direct
   dependencies.  It will be resolved using your project's `node_modules` directory.
 
 * There are also times where you want Webpack to be able to resolve modules in a directory that
 is not a part of any of your dependency's `node_modules`.  If that's the case, please include
-the directory path in the `packages` option described below.
+the directory path in the `resolutions` option described below.
   * If you include a relative path, it will be resolved relative to your `process.cwd()`.
   * **MUST BE A DIRECTORY**.
 
@@ -53,7 +53,7 @@ the directory path in the `packages` option described below.
 
 | Option    | Description |
 |:----------|:------------|
-| packages  | A list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.
+| resolutions  | A list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.
 
 Please define plugin options as follows:
 
@@ -65,7 +65,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-pnpm`,
       options: {
-        packages: [
+        resolutions: [
           `my-awesome-package`,
         ]
       }
