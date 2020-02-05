@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { stat as _stat, Stats, realpath as _realpath } from 'fs';
 import { promisify } from 'util';
 
@@ -23,4 +24,15 @@ export const isDir = async (pathname: string): Promise<Boolean> => {
         //noop
     }
     return false;
+};
+
+export const walkBack = async (startPath: string): Promise<string | void> => {
+    let procPath = path.resolve(startPath);
+    let lastProcPath = '';
+    while (procPath.length > 0) {
+        if (path.basename(procPath) === 'node_modules' && await isDir(procPath)) return procPath;
+        procPath = path.resolve(procPath, '..');
+        if (procPath === lastProcPath) break; // Can't go back any further
+        lastProcPath = procPath;
+    }
 };
