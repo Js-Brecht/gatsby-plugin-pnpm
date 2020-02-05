@@ -1,6 +1,6 @@
-# PNPM Compatibility Plugin for Gatsby
+## PNPM Compatibility Plugin for Gatsby
 
-## Description
+### Description
 
 This plugin will integrate module resolution for packages installed
 using `pnpm`.
@@ -11,7 +11,7 @@ This plugin will configure `webpack` so that it is able to see `Gatsby`'s depend
 
 ---
 
-## How to install
+### How to install
 
 * Include the plugin in your `gatsby-config.js`.
 
@@ -27,6 +27,52 @@ module.exports = {
 ```
 
 That's it.  You should be able to build now.
+
+---
+
+### Extended usage
+
+* Sometimes, Webpack may need to resolve a module that is a sub-dependency of one of your
+project's dependencies, and due to the way Webpack resolves modules (and sometimes because of
+the way those modules are written), it won't be able to.  If this is the case, we need to point
+Webpack the way to where those sub-dependencies are located.  To do that, please include your
+dependency in question in the `packages` plugin option described below.
+
+  * Note: the package you define in this manner **MUST** be one of your project's direct
+  dependencies.  It will be resolved using your project's `node_modules` directory.
+
+* There are also times where you want Webpack to be able to resolve modules in a directory that
+is not a part of any of your dependency's `node_modules`.  If that's the case, please include
+the directory path in the `packages` option described below.
+  * If you include a relative path, it will be resolved relative to your `process.cwd()`.
+  * **MUST BE A DIRECTORY**.
+
+---
+
+### Available Options
+
+| Option    | Description |
+|:----------|:------------|
+| packages  | A list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.
+
+Please define plugin options as follows:
+
+```js
+// gatsby-config.js
+module.exports = {
+  plugins: [
+    ...,
+    {
+      resolve: `gatsby-plugin-pnpm`,
+      options: {
+        packages: [
+          `my-awesome-package`,
+        ]
+      }
+    }
+  ]
+}
+```
 
 ## Issues / Contributing
 
