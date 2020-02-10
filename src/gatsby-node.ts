@@ -37,7 +37,7 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
         pnpmNodeModules,
     ];
 
-    if (options.resolutions) {
+    if (options.include) {
         for (const pkgName of options.include) {
             // If the defined package name option is a directory, then resolve its realpath and
             // load it directly
