@@ -45,7 +45,7 @@ describe('Defining module/loader resolutions', () => {
         beforeEach(() => {
             setWebpackConfig.mockReset();
         });
-        it('Default options', async () => {
+        it('With default options', async () => {
             const resolutions = [
                 'node_modules',
                 path.resolve(path.join(process.cwd(), 'node_modules')),
@@ -61,6 +61,9 @@ describe('Defining module/loader resolutions', () => {
     describe('Resolves with include options accurately', () => {
         beforeEach(() => {
             setWebpackConfig.mockReset();
+            Object.entries(reporter).forEach(([key, fn]) => {
+                fn.mockReset();
+            });
         });
 
         it('With package name', async () => {
@@ -98,6 +101,25 @@ describe('Defining module/loader resolutions', () => {
             });
             expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
+
+        it('Warns with non-existant package', async () => {
+            await onCreateWebpackConfig(args, {
+                include: [
+                    'foo-bar',
+                ],
+            });
+            expect(reporter.warn).toHaveBeenCalledTimes(1);
+        });
+
+        it('Warns with bad directory', async () => {
+            await onCreateWebpackConfig(args, {
+                include: [
+                    path.join(__dirname, 'foobar'),
+                ],
+            });
+            expect(reporter.warn).toHaveBeenCalledTimes(1);
+        });
+
     });
 
     describe('Resolves with strict mode correctly', () => {
