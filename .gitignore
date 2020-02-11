@@ -70,4 +70,4 @@ yarn-error.log
 
 dist
 
-!*/__tests__/node_modules
+!tests/node_modules

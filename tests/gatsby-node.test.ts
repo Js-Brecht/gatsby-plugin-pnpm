@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { realpath, walkBack } from '../utils';
+import { realpath, walkBack } from '../src/utils';
 import { Configuration as WebpackConfig } from 'webpack';
-import { onCreateWebpackConfig as _onCreateWebpackConfig, IPluginOptions } from '../gatsby-node';
+import { onCreateWebpackConfig as _onCreateWebpackConfig, IPluginOptions } from '../src/gatsby-node';
 
 const reporter = {
     warn: jest.fn((message: string): string => message),

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { isDir, fileExists, walkBack, realpath, getPkgNodeModules } from '../utils';
+import { isDir, fileExists, walkBack, realpath, getPkgNodeModules } from '../src/utils';
 
 describe('Utility function tests', () => {
     const curDir = process.cwd();
