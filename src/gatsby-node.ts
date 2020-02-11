@@ -22,7 +22,7 @@ export interface IPluginOptions extends Omit<PluginOptions, 'plugins'> {
  * |:--------|:------------|
  * | include | **OPTIONAL**: a list of package names and/or paths that you would like to be made available to Webpack.  Each of these should either be the name of one of your project's direct dependencies, or a path to a folder containing packages that can be resolved as a module.|
  * | projectPath | **OPTIONAL**: The path to your project; i.e. the folder containing your `package.json`.  This will be used when locating package names included in `include`, and for resolving your project's `node_modules` directory |
- * | strict | **OPTIONAL**: Defaults to true.<br /> `true` = Resolve modules using the `pnpm` philosophy of limiting the module scope of your project.<br /> `false` = Use `node`'s module resolution, which looks in every `node_modules` walking up your directory tree. |
+ * | strict | **OPTIONAL**: Defaults to true.  `true` = Resolve modules using the `pnpm` philosophy of limiting the module scope of your project.  `false` = Use `node`'s module resolution, which looks in every `node_modules` walking up your directory tree. |
  */
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async ({ actions, reporter }: CreateWebpackConfigArgs, options: IPluginOptions = {} as IPluginOptions): Promise<void> => {
     const { setWebpackConfig } = actions;
