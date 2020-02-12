@@ -1,5 +1,9 @@
 ## PNPM Compatibility Plugin for Gatsby
 
+---
+
+[![Coverage Status](https://coveralls.io/repos/github/Js-Brecht/gatsby-plugin-pnpm/badge.svg?branch=master)](https://coveralls.io/github/Js-Brecht/gatsby-plugin-pnpm?branch=master)
+
 ### Description
 
 This plugin will integrate Webpack module & loader resolution for packages installed

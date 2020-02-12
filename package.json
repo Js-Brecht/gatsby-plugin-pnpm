@@ -33,7 +33,8 @@
     "prebuild": "npm run clean",
     "build": "tsc",
     "build:watch": "run-s \"build -- -w\"",
-    "test": "jest --config ./jest.config.js"
+    "test": "jest --config ./jest.config.js --verbose",
+    "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "peerDependencies": {
     "gatsby": "~2.x.x"
@@ -46,6 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^2.19.0",
     "@typescript-eslint/parser": "^2.19.0",
     "@typescript-eslint/typescript-estree": "^2.19.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.8.0",
     "gatsby": "^2.19.12",
     "jest": "^25.1.0",
