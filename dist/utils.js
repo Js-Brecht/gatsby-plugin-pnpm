@@ -78,31 +78,14 @@ exports.isDir = function (pathname) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.walkBack = function (startPath) { return __awaiter(void 0, void 0, void 0, function () {
-    var procPath, lastProcPath, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                procPath = path.resolve(startPath);
-                lastProcPath = '';
-                _b.label = 1;
-            case 1:
-                if (!(procPath.length > 0)) return [3, 4];
-                _a = path.basename(procPath) === 'node_modules';
-                if (!_a) return [3, 3];
-                return [4, exports.isDir(procPath)];
-            case 2:
-                _a = (_b.sent());
-                _b.label = 3;
-            case 3:
-                if (_a)
-                    return [2, procPath];
-                procPath = path.resolve(procPath, '..');
-                if (procPath === lastProcPath)
-                    return [3, 4];
-                lastProcPath = procPath;
-                return [3, 1];
-            case 4: return [2, ''];
-        }
+    var procPath, sep, matches;
+    return __generator(this, function (_a) {
+        procPath = path.resolve(startPath);
+        sep = '[\\/]';
+        matches = new RegExp("(.*" + sep + "node_modules)(?:" + sep + ".+?$|" + sep + "?$)", 'i').exec(procPath);
+        if (matches && matches[1])
+            return [2, matches[1]];
+        return [2, ''];
     });
 }); };
 exports.getPkgNodeModules = function (_a) {
