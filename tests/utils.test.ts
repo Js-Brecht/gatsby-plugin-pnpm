@@ -24,6 +24,10 @@ describe('Utility function tests', () => {
             const shouldBe = '';
             expect(await walkBack(path.resolve('/'))).toBe(shouldBe);
         });
+        it('Returns 0-length string when no "node_modules" exists in path', async () => {
+            const shouldBe = '';
+            expect(await walkBack('/asdf/123/4321/fdsa/foo/bar/baz/boom')).toBe(shouldBe);
+        });
     });
     describe('getPkgNodeModules() is accurate', () => {
         beforeEach(() => {
