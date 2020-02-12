@@ -95,10 +95,10 @@ module.exports = {
     {
       resolve: `gatsby-plugin-pnpm`,
       options: {
-        projectPath: path.resolve(path.join(__dirname, '..')),
+        projectPath: path.dirname(__dirname), // use parent directory as project root
         include: [
-          `my-awesome-package`,
-          `path/to/my/private/webpack/loaders`
+          `my-awesome-package`, // <- resolve this package name
+          `path/to/my/private/webpack/loaders` // <- resolve from this directory
         ],
         strict: true
       }
