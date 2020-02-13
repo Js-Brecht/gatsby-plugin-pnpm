@@ -23,9 +23,6 @@ const jestConfig = {
     ],
     testEnvironment: 'node',
     testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$',
-    testPathIgnorePatterns: [
-        `${projectPath}/tests/silo`,
-    ],
     coveragePathIgnorePatterns: [
         '/node_modules/',
         '/test/',

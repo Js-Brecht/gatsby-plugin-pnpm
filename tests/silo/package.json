@@ -33,7 +33,7 @@
     "prebuild": "npm run clean",
     "build": "tsc",
     "build:watch": "run-s \"build -- -w\"",
-    "test": "run-s test:root test:silo",
+    "test": "jest --config ./jest.config.js --verbose",
     "test:root": "jest --config ./jest.config.js --verbose",
     "test:silo": "cd tests/silo; jest --config ./jest.config.js --verbose",
     "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
@@ -56,7 +56,6 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.1",
     "ts-jest": "^25.2.0",
-    "type-fest": "^0.10.0",
     "typedoc": "^0.15.8",
     "typescript": "^3.7.5"
   }

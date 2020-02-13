@@ -13,6 +13,7 @@ devDependencies:
   npm-run-all: 4.1.5
   rimraf: 3.0.1
   ts-jest: 25.2.0_jest@25.1.0
+  type-fest: 0.10.0
   typedoc: 0.15.8
   typescript: 3.7.5
 lockfileVersion: 5.1
@@ -8374,7 +8375,7 @@ packages:
   /normalize-package-data/2.5.0:
     dependencies:
       hosted-git-info: 2.8.5
-      resolve: 1.15.0
+      resolve: 1.15.1
       semver: 5.7.1
       validate-npm-package-license: 3.0.4
     dev: true
@@ -11716,6 +11717,12 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
+  /type-fest/0.10.0:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-EUV9jo4sffrwlg8s0zDhP0T2WD3pru5Xi0+HTE3zTUmBaZNhfkite9PdSJwdXLwPVW0jnAHT56pZHIOYckPEiw==
   /type-fest/0.3.1:
     dev: true
     engines:
@@ -12636,5 +12643,6 @@ specifiers:
   npm-run-all: ^4.1.5
   rimraf: ^3.0.1
   ts-jest: ^25.2.0
+  type-fest: ^0.10.0
   typedoc: ^0.15.8
   typescript: ^3.7.5

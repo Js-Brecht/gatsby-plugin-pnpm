@@ -207,7 +207,7 @@ describe('Defining module/loader resolutions', () => {
                 await walkBack(await realpath(path.join(curDir, 'node_modules', 'jest'))),
                 path.join(__dirname, 'node_modules'),
                 curDir,
-                curDir,
+                __dirname,
             ];
             const shouldEqual = getConfigResults(resolutions);
             await onCreateWebpackConfig(args, {
