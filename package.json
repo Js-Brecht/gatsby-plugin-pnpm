@@ -33,6 +33,8 @@
     "prebuild": "npm run clean",
     "build": "tsc",
     "build:watch": "run-s \"build -- -w\"",
+    "prepublish": "npm run build",
+    "publish": "npm run publish",
     "test": "run-s test:root test:silo",
     "test:root": "jest --config ./jest.config.js --verbose",
     "test:silo": "cd tests/silo; jest --config ./jest.config.js --verbose",
