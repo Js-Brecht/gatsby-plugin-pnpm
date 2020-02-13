@@ -49,9 +49,9 @@ exports.onCreateWebpackConfig = function (_a, options) {
     var actions = _a.actions, reporter = _a.reporter;
     if (options === void 0) { options = {}; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var setWebpackConfig, include, _b, projectPath, _c, strict, nodeModules, pnpmNodeModules, gatsbyNodeModules, modulePaths, _i, include_1, pkgName, _d, _e, nodePath, config;
-        return __generator(this, function (_f) {
-            switch (_f.label) {
+        var setWebpackConfig, include, _b, projectPath, _c, strict, nodeModules, pnpmNodeModules, gatsbyNodeModules, modulePaths, _i, include_1, incName, isDirectory, nodePath, _d, absPath, pkgPath, config;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     setWebpackConfig = actions.setWebpackConfig;
                     include = options.include, _b = options.projectPath, projectPath = _b === void 0 ? process.cwd() : _b, _c = options.strict, strict = _c === void 0 ? true : _c;
@@ -59,7 +59,7 @@ exports.onCreateWebpackConfig = function (_a, options) {
                     pnpmNodeModules = path.join(nodeModules, '.pnpm', 'node_modules');
                     return [4, utils_1.getPkgNodeModules({ pkgName: 'gatsby', nodeModules: nodeModules, strict: strict })];
                 case 1:
-                    gatsbyNodeModules = _f.sent();
+                    gatsbyNodeModules = _e.sent();
                     if (!gatsbyNodeModules) {
                         return [2, reporter.panic('[gatsby-plugin-pnpm] You must have Gatsby installed to use this plugin!')];
                     }
@@ -69,34 +69,39 @@ exports.onCreateWebpackConfig = function (_a, options) {
                         gatsbyNodeModules,
                         pnpmNodeModules,
                     ];
-                    if (!include) return [3, 8];
+                    if (!include) return [3, 7];
                     _i = 0, include_1 = include;
-                    _f.label = 2;
+                    _e.label = 2;
                 case 2:
-                    if (!(_i < include_1.length)) return [3, 8];
-                    pkgName = include_1[_i];
-                    return [4, utils_1.isDir(pkgName)];
+                    if (!(_i < include_1.length)) return [3, 7];
+                    incName = include_1[_i];
+                    isDirectory = /^[./\\]/.test(incName);
+                    _d = !isDirectory;
+                    if (!_d) return [3, 4];
+                    return [4, utils_1.getPkgNodeModules({ pkgName: incName, nodeModules: nodeModules, strict: strict })];
                 case 3:
-                    if (!_f.sent()) return [3, 5];
-                    _e = (_d = modulePaths).push;
-                    return [4, utils_1.realpath(path.resolve(pkgName))];
+                    _d = (_e.sent());
+                    _e.label = 4;
                 case 4:
-                    _e.apply(_d, [_f.sent()]);
-                    return [3, 7];
-                case 5: return [4, utils_1.getPkgNodeModules({ pkgName: pkgName, nodeModules: nodeModules, strict: strict })];
-                case 6:
-                    nodePath = _f.sent();
+                    nodePath = _d;
                     if (nodePath) {
                         modulePaths.push(nodePath);
+                        return [3, 6];
                     }
-                    else {
-                        reporter.warn("[gatsby-plugin-pnpm] Unable to locate dependency " + pkgName + "'s node_modules directory!");
+                    absPath = path.isAbsolute(incName) ? incName : path.join(projectPath, incName);
+                    return [4, utils_1.isDir(absPath)];
+                case 5:
+                    pkgPath = (_e.sent()) && absPath || '';
+                    if (pkgPath) {
+                        modulePaths.push(absPath);
+                        return [3, 6];
                     }
-                    _f.label = 7;
-                case 7:
+                    reporter.warn("[gatsby-plugin-pnpm] Unable to locate dependency " + incName + "!");
+                    _e.label = 6;
+                case 6:
                     _i++;
                     return [3, 2];
-                case 8:
+                case 7:
                     config = {
                         resolve: {
                             modules: modulePaths,
