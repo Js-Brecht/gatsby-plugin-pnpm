@@ -36,7 +36,8 @@
     "test": "run-s test:root test:silo",
     "test:root": "jest --config ./jest.config.js --verbose",
     "test:silo": "cd tests/silo; jest --config ./jest.config.js --verbose",
-    "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
+    "test:coverage": "jest --config ./jest.config.js --verbose --coverage",
+    "test:coverage-all": "run-s test test:coverage"
   },
   "peerDependencies": {
     "gatsby": "~2.x.x"
