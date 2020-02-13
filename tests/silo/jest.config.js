@@ -1,7 +1,8 @@
 const path = require('path');
+const rootDir = path.resolve(__dirname, '..', '..');
 const projectPath = __dirname;
 const pkgJsonPath = path.join(projectPath, 'package.json');
-const tsConfigPath = path.join(projectPath, 'tsconfig.json');
+const tsConfigPath = path.join(rootDir, 'tsconfig.json');
 
 const { compilerOptions } = require(tsConfigPath);
 
