@@ -1,6 +1,6 @@
 ## PNPM Compatibility Plugin for Gatsby
 
-[![Coverage Status](https://coveralls.io/repos/github/Js-Brecht/gatsby-plugin-pnpm/badge.svg?branch=master)](https://coveralls.io/github/Js-Brecht/gatsby-plugin-pnpm?branch=master)
+[![codecov](https://codecov.io/gh/Js-Brecht/gatsby-plugin-pnpm/branch/master/graph/badge.svg)](https://codecov.io/gh/Js-Brecht/gatsby-plugin-pnpm)
 
 ---
 

@@ -36,7 +36,7 @@
     "test": "run-s test:root test:silo",
     "test:root": "jest --config ./jest.config.js --verbose",
     "test:silo": "cd tests/silo; jest --config ./jest.config.js --verbose",
-    "test:coverage": "jest --config ./jest.config.js --verbose --coverage",
+    "test:coverage": "jest --config ./jest.config.js --coverage",
     "test:coverage-all": "run-s test test:coverage"
   },
   "peerDependencies": {
