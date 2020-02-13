@@ -27,8 +27,8 @@ jobs:
       env:
         CI: true
 
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.0.1
       env:
         CI: true
         COVERALLS_GIT_BRANCH: ${{ github.ref }}
