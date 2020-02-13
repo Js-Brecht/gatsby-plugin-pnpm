@@ -1,4 +1,4 @@
-name: Coveralls | master
+name: Code Coverage | master
 
 on:
   push:
