@@ -31,7 +31,6 @@ jobs:
       uses: coverallsapp/github-action@v1.0.1
       env:
         CI: true
-        COVERALLS_GIT_BRANCH: ${{ github.ref }}
       with:
         node-version: ${{ matrix.node-version }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
