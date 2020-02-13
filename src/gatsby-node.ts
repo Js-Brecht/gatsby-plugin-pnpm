@@ -47,19 +47,32 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
     ];
 
     if (include) {
-        for (const pkgName of include) {
-            // If the defined package name option is a directory, then resolve its realpath and
-            // load it directly
-            if (await isDir(pkgName)) {
-                modulePaths.push(await realpath(path.resolve(pkgName)));
-            } else {
-                const nodePath = await getPkgNodeModules({ pkgName, nodeModules, strict });
-                if (nodePath) {
-                    modulePaths.push(nodePath);
-                } else {
-                    reporter.warn(`[gatsby-plugin-pnpm] Unable to locate dependency ${pkgName}'s node_modules directory!`);
-                }
+        for (const incName of include) {
+            // If the `include` name starts with a period, or a slash, then we can immediately rule out
+            // it being a package
+            const isDirectory = /^[./\\]/.test(incName);
+            // If the current value resolves as a package, then we use it
+            const nodePath = !isDirectory && await getPkgNodeModules({ pkgName: incName, nodeModules, strict });
+            if (nodePath) {
+                modulePaths.push(nodePath);
+                continue;
             }
+
+            // This isn't a dependency/package name, so check if it's a directory
+
+            // Get the absolute path with the provided projectPath
+            const absPath = path.isAbsolute(incName) ? incName : path.join(projectPath, incName);
+            // If not a directory, then we are going to skip this one
+            const pkgPath = await isDir(absPath) && absPath || '';
+            // If the defined `include` option index is a directory, then load that
+            if (pkgPath) {
+                modulePaths.push(absPath);
+                continue;
+            }
+
+            // This isn't a directory, or a package/dependency, so print a warning to tell the user
+            // they might have an error in their configuration
+            reporter.warn(`[gatsby-plugin-pnpm] Unable to locate dependency ${incName}!`);
         }
     }
 
