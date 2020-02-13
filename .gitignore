@@ -71,5 +71,6 @@ yarn-error.log
 dist
 
 !tests/node_modules
+!tests/silo/node_modules
 
 .coveralls.yml

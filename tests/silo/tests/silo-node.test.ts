@@ -97,7 +97,7 @@ describe('Defining module/loader resolutions in silo', () => {
             await onCreateWebpackConfig(args, {
                 strict: false,
                 include: [
-                    'foo-package',
+                    'silo-foo-package',
                     '../../../node_modules',
                 ],
             });
