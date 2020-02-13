@@ -1,4 +1,4 @@
-name: Node.js CI | master
+name: Node.js Tests | master
 
 on:
   push:
