@@ -7,7 +7,7 @@
 
 ### Description
 
-This plugin will integrate Webpack module & loader resolution for packages installed
+This plugin will configure Webpack module & loader resolution for packages installed
 via `pnpm`.
 
 When using `pnpm`, building a Gatsby project will fail because `pnpm` uses a unique
