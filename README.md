@@ -51,7 +51,7 @@ dependency in question in the `include` plugin option described below.
 #### Option: `include` - add resolutions for directories
 
 * There are also times where you want Webpack to be able to resolve modules in a directory that
-is not a part of any of your dependency's `node_modules`.  If that's the case, please include
+is not a part of any of your dependencies `node_modules`.  If that's the case, please include
 the directory path in the `include` option described below.
   * If you include a relative path, it will be resolved relative to your `process.cwd()`.
   * **MUST BE A DIRECTORY**.
