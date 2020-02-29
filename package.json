@@ -6,9 +6,9 @@
   "types": "./dist/gatsby-node.js",
   "repository": {
     "type": "git",
-    "url": "https://Js-Brecht/gatsby-plugin-pnpm"
+    "url": "https://github.com/Js-Brecht/gatsby-plugin-pnpm"
   },
-  "homepage": "https://Js-Brecht/gatsby-plugin-pnpm",
+  "homepage": "https://github.com/Js-Brecht/gatsby-plugin-pnpm",
   "keywords": [
     "gatsby-plugin",
     "gatsby",
@@ -18,7 +18,7 @@
   "author": "Jeremy Albright",
   "license": "MIT",
   "bugs": {
-    "url": "https://Js-Brecht/gatsby-plugin-pnpm/issues"
+    "url": "https://github.com/Js-Brecht/gatsby-plugin-pnpm/issues"
   },
   "files": [
     "dist",
