@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-pnpm",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Easily add pnpm support to your Gatsby project",
   "main": "index.js",
   "types": "./dist/gatsby-node.js",
