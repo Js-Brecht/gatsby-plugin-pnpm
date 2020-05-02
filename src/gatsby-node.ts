@@ -94,6 +94,5 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
     webpackConfig.resolve.modules = uniq([...modulePaths, ...compareResolvePaths]);
     webpackConfig.resolveLoader.modules = uniq([...modulePaths, ...compareResolveLoaderPaths]);
 
-    console.log(webpackConfig.resolve.modules);
     replaceWebpackConfig(webpackConfig);
 };
