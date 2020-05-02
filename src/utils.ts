@@ -28,7 +28,7 @@ export const isDir = async (pathname: string): Promise<Boolean> => {
 
 export const walkBack = async (startPath: string): Promise<string> => {
     const procPath = path.resolve(startPath);
-    const sep = '[\\/]';
+    const sep = '[\\\\/]';
     const matches = new RegExp(`(.*${sep}node_modules)(?:${sep}.+?$|${sep}?$)`, 'i').exec(procPath);
     if (matches && matches[1]) return matches[1];
     return '';
