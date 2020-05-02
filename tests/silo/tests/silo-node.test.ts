@@ -1,6 +1,8 @@
 import * as path from 'path';
-import { realpath, walkBack } from '../../../src/utils';
+import uniq from 'lodash.uniq';
 import { Configuration as WebpackConfig } from 'webpack';
+import { CreateWebpackConfigArgs as _CreateWebpackConfigArgs } from 'gatsby';
+import { realpath, walkBack } from '../../../src/utils';
 import { onCreateWebpackConfig as _onCreateWebpackConfig, IPluginOptions } from '../../../src/gatsby-node';
 
 const reporter = {
@@ -10,19 +12,20 @@ const reporter = {
 
 interface CreateWebpackConfigArgs {
     actions: {
-        setWebpackConfig: jest.Mock<WebpackConfig, [WebpackConfig]>;
+        replaceWebpackConfig: jest.Mock<WebpackConfig, [WebpackConfig]>;
     };
     reporter: typeof reporter;
+    getConfig: _CreateWebpackConfigArgs['getConfig'];
 }
 type IOnCreateWebpackConfig = (actions: CreateWebpackConfigArgs, options?: IPluginOptions) => Promise<void>;
 
 const getConfigResults = (resolutions: string[]): WebpackConfig => {
     return {
         resolve: {
-            modules: resolutions,
+            modules: uniq(resolutions),
         },
         resolveLoader: {
-            modules: resolutions,
+            modules: uniq(resolutions),
         },
     };
 };
@@ -30,13 +33,14 @@ const getConfigResults = (resolutions: string[]): WebpackConfig => {
 describe('Defining module/loader resolutions in silo', () => {
 
     const onCreateWebpackConfig = _onCreateWebpackConfig as unknown as IOnCreateWebpackConfig;
-    const setWebpackConfig: CreateWebpackConfigArgs['actions']['setWebpackConfig'] = jest.fn((config) => config);
+    const replaceWebpackConfig: CreateWebpackConfigArgs['actions']['replaceWebpackConfig'] = jest.fn((config) => config);
     const actions: CreateWebpackConfigArgs['actions'] = {
-        setWebpackConfig,
+        replaceWebpackConfig,
     };
     const args: CreateWebpackConfigArgs = {
         actions,
         reporter,
+        getConfig: () => ({}),
     };
 
     const curDir = process.cwd();
@@ -47,7 +51,7 @@ describe('Defining module/loader resolutions in silo', () => {
 
     describe('Resolves with strict mode correctly', () => {
         beforeEach(() => {
-            setWebpackConfig.mockReset();
+            replaceWebpackConfig.mockReset();
             Object.entries(reporter).forEach(([key, fn]) => {
                 fn.mockReset();
             });
@@ -65,7 +69,7 @@ describe('Defining module/loader resolutions in silo', () => {
             await onCreateWebpackConfig(args, {
                 strict: false,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
         it('With strict off, include package name', async () => {
             const resolutions = [
@@ -82,7 +86,7 @@ describe('Defining module/loader resolutions in silo', () => {
                     'jest',
                 ],
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
         it('With strict off, include package name and directory', async () => {
             const resolutions = [
@@ -101,7 +105,7 @@ describe('Defining module/loader resolutions in silo', () => {
                     '../../../node_modules',
                 ],
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
         it('Panics with strict on, and no Gatsby', async () => {
@@ -115,7 +119,7 @@ describe('Defining module/loader resolutions in silo', () => {
 
     describe('Resolves with projectPath correctly', () => {
         beforeEach(() => {
-            setWebpackConfig.mockReset();
+            replaceWebpackConfig.mockReset();
             Object.entries(reporter).forEach(([key, fn]) => {
                 fn.mockReset();
             });
@@ -139,7 +143,7 @@ describe('Defining module/loader resolutions in silo', () => {
                 ],
                 projectPath: testsDir,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
         it('With strict on, and package and directory includes', async () => {
@@ -162,7 +166,7 @@ describe('Defining module/loader resolutions in silo', () => {
                 ],
                 projectPath: rootDir,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
         it('With strict on, and panic with no Gatsby', async () => {
