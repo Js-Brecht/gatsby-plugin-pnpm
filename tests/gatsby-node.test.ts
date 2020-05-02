@@ -1,6 +1,8 @@
 import * as path from 'path';
-import { realpath, walkBack } from '../src/utils';
+import uniq from 'lodash.uniq';
+import { CreateWebpackConfigArgs as _CreateWebpackConfigArgs } from 'gatsby';
 import { Configuration as WebpackConfig } from 'webpack';
+import { realpath, walkBack } from '../src/utils';
 import { onCreateWebpackConfig as _onCreateWebpackConfig, IPluginOptions } from '../src/gatsby-node';
 
 const reporter = {
@@ -10,19 +12,20 @@ const reporter = {
 
 interface CreateWebpackConfigArgs {
     actions: {
-        setWebpackConfig: jest.Mock<WebpackConfig, [WebpackConfig]>;
+        replaceWebpackConfig: jest.Mock<WebpackConfig, [WebpackConfig]>;
     };
     reporter: typeof reporter;
+    getConfig: _CreateWebpackConfigArgs['getConfig'];
 }
 type IOnCreateWebpackConfig = (actions: CreateWebpackConfigArgs, options?: IPluginOptions) => Promise<void>;
 
 const getConfigResults = (resolutions: string[]): WebpackConfig => {
     return {
         resolve: {
-            modules: resolutions,
+            modules: uniq(resolutions),
         },
         resolveLoader: {
-            modules: resolutions,
+            modules: uniq(resolutions),
         },
     };
 };
@@ -30,20 +33,21 @@ const getConfigResults = (resolutions: string[]): WebpackConfig => {
 describe('Defining module/loader resolutions', () => {
 
     const onCreateWebpackConfig = _onCreateWebpackConfig as unknown as IOnCreateWebpackConfig;
-    const setWebpackConfig: CreateWebpackConfigArgs['actions']['setWebpackConfig'] = jest.fn((config) => config);
+    const replaceWebpackConfig: CreateWebpackConfigArgs['actions']['replaceWebpackConfig'] = jest.fn((config) => config);
     const actions: CreateWebpackConfigArgs['actions'] = {
-        setWebpackConfig,
+        replaceWebpackConfig,
     };
     const args: CreateWebpackConfigArgs = {
         actions,
         reporter,
+        getConfig: () => ({}),
     };
 
     const curDir = process.cwd();
 
     describe('Resolves with default options accurately', () => {
         beforeEach(() => {
-            setWebpackConfig.mockReset();
+            replaceWebpackConfig.mockReset();
         });
         it('With default options', async () => {
             const resolutions = [
@@ -54,13 +58,13 @@ describe('Defining module/loader resolutions', () => {
             ];
             const shouldEqual = getConfigResults(resolutions);
             await onCreateWebpackConfig(args);
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
     });
 
     describe('Resolves with include options accurately', () => {
         beforeEach(() => {
-            setWebpackConfig.mockReset();
+            replaceWebpackConfig.mockReset();
             Object.entries(reporter).forEach(([key, fn]) => {
                 fn.mockReset();
             });
@@ -80,7 +84,7 @@ describe('Defining module/loader resolutions', () => {
                     'jest',
                 ],
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
         it('With directory', async () => {
@@ -99,7 +103,7 @@ describe('Defining module/loader resolutions', () => {
                     './node_modules',
                 ],
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
         it('Warns with non-existant package', async () => {
@@ -124,7 +128,7 @@ describe('Defining module/loader resolutions', () => {
 
     describe('Resolves with strict mode correctly', () => {
         beforeEach(() => {
-            setWebpackConfig.mockReset();
+            replaceWebpackConfig.mockReset();
             Object.entries(reporter).forEach(([key, fn]) => {
                 fn.mockReset();
             });
@@ -142,7 +146,7 @@ describe('Defining module/loader resolutions', () => {
             await onCreateWebpackConfig(args, {
                 strict: true,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
         it('With strict off', async () => {
             process.chdir(__dirname);
@@ -156,7 +160,7 @@ describe('Defining module/loader resolutions', () => {
             await onCreateWebpackConfig(args, {
                 strict: false,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
         it('Panics with strict on, and no Gatsby', async () => {
             process.chdir(__dirname);
@@ -169,7 +173,7 @@ describe('Defining module/loader resolutions', () => {
 
     describe('Resolves with projectPath correctly', () => {
         beforeEach(() => {
-            setWebpackConfig.mockReset();
+            replaceWebpackConfig.mockReset();
             Object.entries(reporter).forEach(([key, fn]) => {
                 fn.mockReset();
             });
@@ -195,7 +199,7 @@ describe('Defining module/loader resolutions', () => {
                 ],
                 projectPath: __dirname,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
         it('With strict off, and package and directory includes', async () => {
@@ -220,7 +224,7 @@ describe('Defining module/loader resolutions', () => {
                 ],
                 projectPath: __dirname,
             });
-            expect(setWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
+            expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
 
     });
