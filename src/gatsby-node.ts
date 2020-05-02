@@ -1,7 +1,8 @@
 import * as path from 'path';
 import { Configuration } from 'webpack';
 import { GatsbyNode, CreateWebpackConfigArgs, PluginOptions } from 'gatsby';
-import { realpath, isDir, getPkgNodeModules } from './utils';
+import uniq from 'lodash.uniq';
+import { isDir, getPkgNodeModules } from './utils';
 
 export interface IPluginOptions extends Omit<PluginOptions, 'plugins'> {
     include?: string[];
@@ -24,8 +25,16 @@ export interface IPluginOptions extends Omit<PluginOptions, 'plugins'> {
  * | projectPath | **OPTIONAL**: The path to your project; i.e. the folder containing your `package.json`.  This will be used when locating package names included in `include`, and for resolving your project's `node_modules` directory |
  * | strict | **OPTIONAL**: Defaults to true.  `true` = Resolve modules using the `pnpm` philosophy of limiting the module scope of your project.  `false` = Use `node`'s module resolution, which looks in every `node_modules` walking up your directory tree. |
  */
-export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async ({ actions, reporter }: CreateWebpackConfigArgs, options: IPluginOptions = {} as IPluginOptions): Promise<void> => {
-    const { setWebpackConfig } = actions;
+export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async (
+    {
+        actions,
+        reporter,
+        getConfig,
+    }: CreateWebpackConfigArgs,
+    options: IPluginOptions = {} as IPluginOptions,
+): Promise<void> => {
+    const webpackConfig: Configuration = getConfig();
+    const { replaceWebpackConfig } = actions;
     const {
         include,
         projectPath = process.cwd(),
@@ -76,14 +85,15 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
         }
     }
 
-    const config: Configuration = {
-        resolve: {
-            modules: modulePaths,
-        },
-        resolveLoader: {
-            modules: modulePaths,
-        },
-    };
+    if (!webpackConfig.resolve) webpackConfig.resolve = {};
+    if (!webpackConfig.resolveLoader) webpackConfig.resolveLoader = {};
 
-    setWebpackConfig(config);
+    const compareResolvePaths = webpackConfig.resolve.modules || [];
+    const compareResolveLoaderPaths = webpackConfig.resolveLoader.modules || [];
+
+    webpackConfig.resolve.modules = uniq([...modulePaths, ...compareResolvePaths]);
+    webpackConfig.resolveLoader.modules = uniq([...modulePaths, ...compareResolveLoaderPaths]);
+
+    console.log(webpackConfig.resolve.modules);
+    replaceWebpackConfig(webpackConfig);
 };
