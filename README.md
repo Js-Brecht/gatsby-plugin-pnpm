@@ -47,7 +47,7 @@ Variations:
     project's dependencies, and due to the way Webpack resolves modules (and sometimes because of
     the way those modules are written), it won't be able to.  If this is the case, we need to point
     Webpack the way to where those sub-dependencies are located.  To do that, please include your
-    dependency in question in the `include` plugin option described below.
+    dependency in question in the `include` plugin option described [below](#available-options).
 
     * Note: if the `strict` option is `true`, then the package you define in this manner **MUST**
       be one of your project's direct dependencies, because it will be resolved using your project's
