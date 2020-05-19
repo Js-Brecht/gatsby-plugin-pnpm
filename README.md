@@ -37,24 +37,30 @@ That's it.  You should be able to build now.
 
 ### Extended usage
 
-#### Option: `include` - add resolutions for dependency packages
+#### Option: `include` - define custom resolutions
 
-* Sometimes, Webpack may need to resolve a module that is a sub-dependency of one of your
-project's dependencies, and due to the way Webpack resolves modules (and sometimes because of
-the way those modules are written), it won't be able to.  If this is the case, we need to point
-Webpack the way to where those sub-dependencies are located.  To do that, please include your
-dependency in question in the `include` plugin option described below.
+Variations:
 
-  * Note: the package you define in this manner **MUST** be one of your project's direct
-  dependencies.  It will be resolved using your project's `node_modules` directory.
+* Add resolution for specific package
 
-#### Option: `include` - add resolutions for directories
+  * Sometimes, Webpack may need to resolve a module that is a sub-dependency of one of your
+    project's dependencies, and due to the way Webpack resolves modules (and sometimes because of
+    the way those modules are written), it won't be able to.  If this is the case, we need to point
+    Webpack the way to where those sub-dependencies are located.  To do that, please include your
+    dependency in question in the `include` plugin option described below.
 
-* There are also times where you want Webpack to be able to resolve modules in a directory that
-is not a part of any of your dependencies `node_modules`.  If that's the case, please include
-the directory path in the `include` option described below.
-  * If you include a relative path, it will be resolved relative to your `process.cwd()`.
-  * **MUST BE A DIRECTORY**.
+    * Note: if the `strict` option is `true`, then the package you define in this manner **MUST**
+      be one of your project's direct dependencies, because it will be resolved using your project's
+      `node_modules` directory.
+
+* add resolutions for directories
+
+  * There are also times where you want Webpack to be able to resolve modules in a directory that
+    is not a part of any of your dependencies `node_modules`.  If that's the case, please include
+    the directory path in the `include` option described below.
+    
+    * If you include a relative path, it will be resolved relative to your `process.cwd()`.
+    * **MUST BE A DIRECTORY**.
 
 #### Option: `projectPath` - define your Project Root
 
