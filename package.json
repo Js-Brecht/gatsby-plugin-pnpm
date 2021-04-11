@@ -40,7 +40,7 @@
     "test:coverage-all": "run-s test test:coverage"
   },
   "peerDependencies": {
-    "gatsby": "~2.x.x"
+    "gatsby": "~2.x.x || ~3.x.x"
   },
   "devDependencies": {
     "@jtechsvcs/eslint-config-typescript": "^2.0.3",
