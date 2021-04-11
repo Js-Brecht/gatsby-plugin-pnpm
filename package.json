@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-pnpm",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Easily add pnpm support to your Gatsby project",
   "main": "index.js",
   "types": "./dist/gatsby-node.js",
@@ -33,6 +33,7 @@
     "prebuild": "npm run clean",
     "build": "tsc",
     "build:watch": "run-s \"build -- -w\"",
+    "prepublishOnly": "run-s clean build",
     "test": "run-s test:root test:silo",
     "test:root": "jest --config ./jest.config.js --verbose",
     "test:silo": "cd tests/silo; jest --config ./jest.config.js --verbose",
