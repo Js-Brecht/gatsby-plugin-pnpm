@@ -1,6 +1,9 @@
 import * as path from 'path';
+import Module from "module";
 import { stat as _stat, Stats, realpath as _realpath } from 'fs';
 import { promisify } from 'util';
+
+export const createRequire = Module.createRequire || Module.createRequireFromPath;
 
 const stat = promisify(_stat);
 export const realpath = promisify(_realpath);
