@@ -16,6 +16,7 @@ interface CreateWebpackConfigArgs {
     };
     reporter: typeof reporter;
     getConfig: _CreateWebpackConfigArgs['getConfig'];
+    store: _CreateWebpackConfigArgs["store"];
 }
 type IOnCreateWebpackConfig = (actions: CreateWebpackConfigArgs, options?: IPluginOptions) => Promise<void>;
 
@@ -41,6 +42,16 @@ describe('Defining module/loader resolutions', () => {
         actions,
         reporter,
         getConfig: () => ({}),
+        store: {
+            dispatch: jest.fn(),
+            replaceReducer: jest.fn(),
+            subscribe: jest.fn(),
+            getState: () => ({
+                program: {
+                    directory: process.cwd(),
+                }
+            }),
+        }
     };
 
     const curDir = process.cwd();
