@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-pnpm",
-  "version": "1.2.6",
+  "version": "1.2.7-rc.1",
   "description": "Easily add pnpm support to your Gatsby project",
   "main": "index.js",
   "types": "./dist/gatsby-node.js",
@@ -46,6 +46,7 @@
   "devDependencies": {
     "@jtechsvcs/eslint-config-typescript": "^2.0.3",
     "@types/jest": "^25.1.2",
+    "@types/lodash.get": "^4.4.6",
     "@types/lodash.uniq": "^4.5.6",
     "@types/node": "^12.12.26",
     "@types/webpack": "^4.41.5",
@@ -64,6 +65,7 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
+    "lodash.get": "^4.4.2",
     "lodash.uniq": "^4.5.0"
   }
 }
