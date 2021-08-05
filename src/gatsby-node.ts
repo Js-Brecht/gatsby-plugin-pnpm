@@ -39,7 +39,7 @@ const fixFrameworkCache = (config: Configuration, siteDirectory: string) => {
                     try {
                         return path.dirname(
                             frameworkRequire.resolve(`${f}/package.json`),
-                        );
+                        ) + path.sep;
                     } catch (err) {
                         return "";
                     }
