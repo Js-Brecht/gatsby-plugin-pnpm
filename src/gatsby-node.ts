@@ -80,7 +80,6 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
     }: CreateWebpackConfigArgs,
     options: IPluginOptions = {} as IPluginOptions,
 ): Promise<void> => {
-    console.log("gatsby-plugin-pnpm:", "onCreateWebpackConfig");
     const programDirectory = store.getState().program.directory;
     const webpackConfig: Configuration = getConfig();
     const { replaceWebpackConfig } = actions;
