@@ -1,60 +1,15 @@
 import * as path from 'path';
-import { Configuration, Options } from 'webpack';
+import { Configuration } from 'webpack';
 import { GatsbyNode, CreateWebpackConfigArgs, PluginOptions } from 'gatsby';
 import uniq from 'lodash.uniq';
-import get from 'lodash.get';
-import { isDir, getPkgNodeModules, createRequire } from './utils';
+import { isDir, getPkgNodeModules } from './utils';
+import { fixFrameworkCache } from "./fixes";
 
 export interface IPluginOptions extends Omit<PluginOptions, 'plugins'> {
     include?: string[];
     projectPath?: string;
     strict?: boolean;
 }
-
-
-/**
- * Fix missing framework in development.
- * See https://github.com/Js-Brecht/gatsby-plugin-pnpm/issues/8
- */
-const fixFrameworkCache = (config: Configuration, siteDirectory: string) => {
-    const framework = (
-        get(config, "optimization.splitChunks.cacheGroups.framework", false)
-    ) as Options.CacheGroupsOptions | boolean;
-
-    if (!framework) return;
-    if (typeof framework !== "object" || !framework.test) return;
-    if (!(framework.test instanceof RegExp)) return;
-
-    const regVal = framework.test.toString();
-    const frameworkPackages = /\[\\\\\/\]\(([^)]+)\)\[\\\\\/\]\/$/.exec(regVal);
-    const frameworkList: string[] = [];
-
-    if (frameworkPackages) {
-        const frameworkRequire = createRequire(`${siteDirectory}/:internal:`);
-        Object.assign(
-            frameworkList,
-            frameworkPackages[1]
-                .split("|")
-                .map((f) => {
-                    try {
-                        return path.dirname(
-                            frameworkRequire.resolve(`${f}/package.json`),
-                        ) + path.sep;
-                    } catch (err) {
-                        return "";
-                    }
-                })
-                .filter(Boolean),
-        );
-    }
-
-    const isRootDependency = (val?: string) => (
-        frameworkList.some((f) => val?.startsWith(f))
-    );
-    framework.test = (mod) => (
-        isRootDependency(mod.resource)
-    );
-};
 
 /**
  * Adds settings to the webpack configuration so that it will be able to resolve modules
@@ -85,7 +40,7 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = async 
     const { replaceWebpackConfig } = actions;
     const {
         include,
-        projectPath = process.cwd(),
+        projectPath = programDirectory,
         strict = true,
     } = options;
     const nodeModules = path.resolve(path.join(projectPath, 'node_modules'));

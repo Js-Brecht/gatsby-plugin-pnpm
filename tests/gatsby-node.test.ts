@@ -20,8 +20,19 @@ interface CreateWebpackConfigArgs {
 }
 type IOnCreateWebpackConfig = (actions: CreateWebpackConfigArgs, options?: IPluginOptions) => Promise<void>;
 
+const defaultOptimization = {
+    splitChunks: {
+        cacheGroups: {
+            framework: {
+                test: "asdf",
+            },
+        },
+    },
+};
+
 const getConfigResults = (resolutions: string[]): WebpackConfig => {
     return {
+        optimization: defaultOptimization,
         resolve: {
             modules: uniq(resolutions),
         },
@@ -30,6 +41,8 @@ const getConfigResults = (resolutions: string[]): WebpackConfig => {
         },
     };
 };
+
+const FRAMEWORK_BUNDLES = ["gatsby", "typescript", "asdf"];
 
 describe('Defining module/loader resolutions', () => {
 
@@ -41,7 +54,9 @@ describe('Defining module/loader resolutions', () => {
     const args: CreateWebpackConfigArgs = {
         actions,
         reporter,
-        getConfig: () => ({}),
+        getConfig: () => ({
+            optimization: defaultOptimization,
+        }),
         store: {
             dispatch: jest.fn(),
             replaceReducer: jest.fn(),
@@ -49,9 +64,9 @@ describe('Defining module/loader resolutions', () => {
             getState: () => ({
                 program: {
                     directory: process.cwd(),
-                }
+                },
             }),
-        }
+        },
     };
 
     const curDir = process.cwd();
@@ -237,6 +252,43 @@ describe('Defining module/loader resolutions', () => {
             });
             expect(replaceWebpackConfig).toHaveBeenLastCalledWith(shouldEqual);
         });
+    });
 
+    describe("Applies fixes", () => {
+        it("Applies framework cache group fix", async () => {
+            const thisArgs = { ...args };
+            const curConfig = {
+                optimization: {
+                    splitChunks: {
+                        cacheGroups: {
+                            framework: {
+                                test: new RegExp(
+                                    `(?<!node_modules.*)[\\\\/]node_modules[\\\\/](${FRAMEWORK_BUNDLES.join(
+                                        `|`,
+                                    )})[\\\\/]`,
+                                ),
+                            },
+                        },
+                    },
+                },
+            };
+
+            thisArgs.getConfig = () => curConfig;
+
+            await onCreateWebpackConfig(thisArgs);
+
+            const frameworkTest = (
+                curConfig.optimization.splitChunks.cacheGroups.framework.test
+            ) as unknown as ((...args: any) => boolean);
+
+            const getModule = (val: string) => ({
+                resource: require.resolve(val),
+            });
+
+            expect(frameworkTest).toBeInstanceOf(Function);
+            expect(frameworkTest(getModule("gatsby"))).toBe(true);
+            expect(frameworkTest(getModule("typescript"))).toBe(true);
+            expect(frameworkTest(getModule("jest"))).toBe(false);
+        });
     });
 });
