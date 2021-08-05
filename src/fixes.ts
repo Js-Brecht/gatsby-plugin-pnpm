@@ -16,8 +16,11 @@ export const fixFrameworkCache = (config: Configuration, siteDirectory: string) 
     if (typeof framework !== "object" || !framework.test) return;
     if (!(framework.test instanceof RegExp)) return;
 
-    const regVal = framework.test.toString();
-    const frameworkPackages = /\[\\\\\/\]\(([^)]+)\)\[\\\\\/\]\/$/.exec(regVal);
+    const regVal = framework.test
+        .toString()
+        .replace(/[[\\\]]/g, "")
+        .slice(1, -1);
+    const frameworkPackages = /\/\(([^)]+)\)\/$/.exec(regVal);
     const frameworkList: string[] = [];
 
     if (frameworkPackages) {
