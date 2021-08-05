@@ -49,9 +49,9 @@ describe('Defining module/loader resolutions in silo', () => {
             getState: () => ({
                 program: {
                     directory: process.cwd(),
-                }
+                },
             }),
-        }
+        },
     };
 
     const curDir = process.cwd();
