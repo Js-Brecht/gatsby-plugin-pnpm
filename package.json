@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-pnpm",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Easily add pnpm support to your Gatsby project",
   "main": "index.js",
   "types": "./dist/gatsby-node.js",
@@ -41,7 +41,7 @@
     "test:coverage-all": "run-s test test:coverage"
   },
   "peerDependencies": {
-    "gatsby": "~2.x.x || ~3.x.x"
+    "gatsby": "~2.x.x || ~4.x.x"
   },
   "devDependencies": {
     "@jtechsvcs/eslint-config-typescript": "^2.0.3",
