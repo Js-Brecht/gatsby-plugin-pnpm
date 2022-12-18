@@ -18,6 +18,12 @@ This plugin will configure `webpack` so that it is able to see `Gatsby`'s depend
 
 ### How to install
 
+* Add the package to devDependencies
+
+```sh
+pnpm add -D gatsby-plugin-pnpm
+```
+
 * Include the plugin in your `gatsby-config.js`.
 
 ```js
